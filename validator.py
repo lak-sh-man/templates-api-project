@@ -43,5 +43,5 @@ def validate_request_body():
             status=400,
             content_type='application/json'
         )
-        
+
     return None
