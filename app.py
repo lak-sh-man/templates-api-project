@@ -288,5 +288,52 @@ def update_single_template(template_id):
             content_type='application/json'
         )
         
+@app.delete("/template/<template_id>")
+@jwt_required()  
+def delete_single_template(template_id):
+    # Validate headers
+    header_error = validate_header()
+    if header_error:
+        return header_error
+
+    try:
+        current_user = get_jwt_identity() 
+
+        # Ensure user exists in users
+        if current_user not in users:
+            return Response(
+                json.dumps({"error": "Register first"}),
+                status=400,
+                content_type="application/json"
+            )
+            
+        # Ensure user exists in templates
+        if current_user not in templates:
+            return Response(
+                json.dumps({"error": "Post a template first."}),
+                status=400,
+                content_type="application/json"
+            )
+
+        # delete template
+        templates[current_user].pop(template_id)
+        
+        response_body = json.dumps({
+            "success": True,
+            "message": "Template deleted successfully",
+        })
+
+        response = Response(response_body, status=200, content_type="application/json")
+        response.headers['Content-Type'] = request.headers.get('Content-Type')
+        response.headers['Accept'] = request.headers.get('Accept')
+        return response
+
+    except Exception:
+        return Response(
+            json.dumps({"error": "Invalid JSON body"}),
+            status=400,
+            content_type='application/json'
+        )
+        
 if __name__ == "__main__":
     app.run(debug=True)
