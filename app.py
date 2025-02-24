@@ -3,7 +3,7 @@ from validator import validate_header, validate_request_body
 import json
 import uuid
 from db import users, templates
-from flask_jwt_extended import JWTManager, create_access_token, get_jwt, jwt_required, create_refresh_token, get_jwt_identity
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
 
