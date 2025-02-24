@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "19df2fae-8f69-43e9-b15e-89224c1acce3",
 		"name": "Templates-Flask-Restapi",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "28705244"
 	},
 	"item": [
@@ -24,14 +24,22 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"first_name\" : \"lakshman\",\r\n    \"last_name\" : \"N\",\r\n    \"email\" : \"lakshman1122000@gmail.com\",\r\n    \"password\" : \"123\"\r\n}",
+					"raw": "{\r\n    \"first_name\" : \"gowtham\",\r\n    \"last_name\" : \"N\",\r\n    \"email\" : \"gowtham1122000@gmail.com\",\r\n    \"password\" : \"123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "http://127.0.0.1:5000/register"
+				"url": {
+					"raw": "{{url}}/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"register"
+					]
+				}
 			},
 			"response": []
 		},
@@ -60,13 +68,31 @@
 						}
 					}
 				},
-				"url": "http://127.0.0.1:5000/login"
+				"url": {
+					"raw": "{{url}}/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Add Template",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -77,11 +103,6 @@
 					{
 						"key": "Accept",
 						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0IjoxNzQwNDE5ODc0LCJqdGkiOiI2NGJmMGY3NC02NTMxLTRlOTEtYmMwNy0xZTFhZGE5YjUwNWMiLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoibGFrc2htYW4xMTIyMDAwQGdtYWlsLmNvbSIsIm5iZiI6MTc0MDQxOTg3NCwiY3NyZiI6IjY5MGQ5NDFiLWNlMDUtNDhmOC04ZGQzLTVkYzE2MGRkYWU5ZiIsImV4cCI6MTc0MDQyMDc3NH0.VlpZN0mLiyaDD8c9xFwjUKbCZ9eVjcEmylKML6MrFec",
 						"type": "text"
 					}
 				],
@@ -94,7 +115,15 @@
 						}
 					}
 				},
-				"url": "http://127.0.0.1:5000/template"
+				"url": {
+					"raw": "{{url}}/template",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"template"
+					]
+				}
 			},
 			"response": []
 		},
@@ -104,6 +133,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -114,11 +153,6 @@
 					{
 						"key": "Accept",
 						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0IjoxNzQwNDE5ODc0LCJqdGkiOiI2NGJmMGY3NC02NTMxLTRlOTEtYmMwNy0xZTFhZGE5YjUwNWMiLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoibGFrc2htYW4xMTIyMDAwQGdtYWlsLmNvbSIsIm5iZiI6MTc0MDQxOTg3NCwiY3NyZiI6IjY5MGQ5NDFiLWNlMDUtNDhmOC04ZGQzLTVkYzE2MGRkYWU5ZiIsImV4cCI6MTc0MDQyMDc3NH0.VlpZN0mLiyaDD8c9xFwjUKbCZ9eVjcEmylKML6MrFec",
 						"type": "text"
 					}
 				],
@@ -131,7 +165,15 @@
 						}
 					}
 				},
-				"url": "http://127.0.0.1:5000/template"
+				"url": {
+					"raw": "{{url}}/template",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"template"
+					]
+				}
 			},
 			"response": []
 		},
@@ -141,6 +183,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -151,11 +203,6 @@
 					{
 						"key": "Accept",
 						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0IjoxNzQwNDE5ODc0LCJqdGkiOiI2NGJmMGY3NC02NTMxLTRlOTEtYmMwNy0xZTFhZGE5YjUwNWMiLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoibGFrc2htYW4xMTIyMDAwQGdtYWlsLmNvbSIsIm5iZiI6MTc0MDQxOTg3NCwiY3NyZiI6IjY5MGQ5NDFiLWNlMDUtNDhmOC04ZGQzLTVkYzE2MGRkYWU5ZiIsImV4cCI6MTc0MDQyMDc3NH0.VlpZN0mLiyaDD8c9xFwjUKbCZ9eVjcEmylKML6MrFec",
 						"type": "text"
 					}
 				],
@@ -168,13 +215,32 @@
 						}
 					}
 				},
-				"url": "http://127.0.0.1:5000/template/52fe08394c794816923b9ed74aae3abe"
+				"url": {
+					"raw": "{{url}}/template/91dee995836c43c78e440d233fb2cae6",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"template",
+						"91dee995836c43c78e440d233fb2cae6"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Update Single Template",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [
 					{
@@ -185,11 +251,6 @@
 					{
 						"key": "Accept",
 						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0IjoxNzQwNDE5ODc0LCJqdGkiOiI2NGJmMGY3NC02NTMxLTRlOTEtYmMwNy0xZTFhZGE5YjUwNWMiLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoibGFrc2htYW4xMTIyMDAwQGdtYWlsLmNvbSIsIm5iZiI6MTc0MDQxOTg3NCwiY3NyZiI6IjY5MGQ5NDFiLWNlMDUtNDhmOC04ZGQzLTVkYzE2MGRkYWU5ZiIsImV4cCI6MTc0MDQyMDc3NH0.VlpZN0mLiyaDD8c9xFwjUKbCZ9eVjcEmylKML6MrFec",
 						"type": "text"
 					}
 				],
@@ -202,13 +263,32 @@
 						}
 					}
 				},
-				"url": "http://127.0.0.1:5000/template/52fe08394c794816923b9ed74aae3abe"
+				"url": {
+					"raw": "{{url}}/template/91dee995836c43c78e440d233fb2cae6",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"template",
+						"91dee995836c43c78e440d233fb2cae6"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Delete Single Template",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT_ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [
 					{
@@ -219,11 +299,6 @@
 					{
 						"key": "Accept",
 						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0IjoxNzQwNDE5ODc0LCJqdGkiOiI2NGJmMGY3NC02NTMxLTRlOTEtYmMwNy0xZTFhZGE5YjUwNWMiLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoibGFrc2htYW4xMTIyMDAwQGdtYWlsLmNvbSIsIm5iZiI6MTc0MDQxOTg3NCwiY3NyZiI6IjY5MGQ5NDFiLWNlMDUtNDhmOC04ZGQzLTVkYzE2MGRkYWU5ZiIsImV4cCI6MTc0MDQyMDc3NH0.VlpZN0mLiyaDD8c9xFwjUKbCZ9eVjcEmylKML6MrFec",
 						"type": "text"
 					}
 				],
@@ -236,7 +311,16 @@
 						}
 					}
 				},
-				"url": "http://127.0.0.1:5000/template/52fe08394c794816923b9ed74aae3abe"
+				"url": {
+					"raw": "{{url}}/template/91dee995836c43c78e440d233fb2cae6",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"template",
+						"91dee995836c43c78e440d233fb2cae6"
+					]
+				}
 			},
 			"response": []
 		}

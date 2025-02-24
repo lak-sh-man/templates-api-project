@@ -8,7 +8,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "lakshman-mongodb"
-app.config["MONGO_URI"] = "mongodb+srv://lakshman:0002211namhskal@cluster0.rlfxw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+app.config["MONGO_URI"] = "mongodb+srv://lakshman:0002211namhskal@cluster0.rlfxw.mongodb.net/templatesDB?retryWrites=true&w=majority&appName=Cluster0"
 app.config["JWT_SECRET_KEY"] = "lakshman"
 
 # Initialize database
@@ -32,17 +32,37 @@ def register_user():
     try:
         json_body = request.get_json()
         email = json_body["email"]
-        if email in users:
+        if not email:
             return Response(
-            json.dumps({"error": "User already exist."}),
-            status=409,
-            content_type='application/json'
-        )
-        users[email] = {**json_body}
+                json.dumps({"error": "Email is required"}),
+                status=400,
+                content_type='application/json'
+            )
+
+        # Check if user already exists in MongoDB
+        if db.users.find_one({"_id": email}):
+            return Response(
+                json.dumps({"error": "User already exists."}),
+                status=409,
+                content_type="application/json"
+            )
+
+        # Insert user into MongoDB
+        new_user = {
+            "_id": email,
+            "first_name": json_body["first_name"],
+            "last_name": json_body["last_name"],
+            "password": json_body["password"] 
+        }
+        db.users.insert_one(new_user)
+
+        # Fetch the updated users collection
+        # users = list(db.users.find({}, {"_id": 1, "first_name": 1, "last_name": 1, "password": 1}))
+
         response_body = json.dumps({
             "success": True,
             "message": "User registered successfully",
-            "user": users[email]["email"]
+            "user": email
             })
         response = Response(response_body, status=201, content_type="application/json")
         response.headers['Content-Type'] = request.headers.get('Content-Type')
@@ -51,7 +71,7 @@ def register_user():
     
     except Exception:
         return Response(
-            json.dumps({"error": "Invalid JSON body"}),
+            json.dumps({"error": "Something went wrong"}),
             status=400,
             content_type='application/json'
         )
@@ -72,12 +92,24 @@ def login_user():
     try:
         json_body = request.get_json()
         email = json_body["email"]
-        if email in users and users[email]["password"] == json_body["password"]:
-            access_token = create_access_token(identity=users[email]["email"], fresh=True)
+        password = json_body["password"]
+
+        if not email or not password:
+            return Response(
+                json.dumps({"error": "Email and password are required."}),
+                status=400,
+                content_type="application/json"
+            )
+
+        # Fetch user from MongoDB
+        user = db.users.find_one({"_id": email})
+
+        if user and user["password"] == password:
+            access_token = create_access_token(identity=email, fresh=True)
             response_body = json.dumps({
                 "success": True,
                 "message": "User Login successful",
-                "user": users[email]["email"],
+                "user": email,
                 "access_token": access_token
                 })           
             response = Response(response_body, status=200, content_type="application/json")
@@ -94,7 +126,7 @@ def login_user():
             
     except Exception:
         return Response(
-            json.dumps({"error": "Invalid JSON body"}),
+            json.dumps({"error": "Something went wrong"}),
             status=400,
             content_type='application/json'
         )
@@ -118,19 +150,29 @@ def create_template():
         template_id = uuid.uuid4().hex
 
         # Ensure user exists in users
-        if current_user not in users:
+        user_exists = db.users.find_one({"_id": current_user})
+        if not user_exists:
             return Response(
                 json.dumps({"error": "Register first"}),
                 status=400,
                 content_type="application/json"
             )
 
-        # Initialize the user's template dictionary if they don't have one yet
-        if current_user not in templates:
-            templates[current_user] = {}
+        # Check if user already has templates
+        user_templates = db.templates.find_one({"_id": current_user})
 
-        # Add new template
-        templates[current_user][template_id] = {**json_body}
+        if user_templates:
+            # Update the existing template dictionary
+            db.templates.update_one(
+                {"_id": current_user},
+                {"$set": {f"templates.{template_id}": json_body}}
+            )
+        else:
+            # Create a new entry for this user
+            db.templates.insert_one({
+                "_id": current_user,
+                "templates": {template_id: json_body}
+            })
 
         response_body = json.dumps({
             "success": True,
@@ -145,7 +187,7 @@ def create_template():
 
     except Exception:
         return Response(
-            json.dumps({"error": "Invalid JSON body"}),
+            json.dumps({"error": "Something went wrong"}),
             status=400,
             content_type='application/json'
         )
@@ -162,15 +204,19 @@ def all_template():
         current_user = get_jwt_identity() 
 
         # Ensure user exists in users
-        if current_user not in users:
+        user_exists = db.users.find_one({"_id": current_user})
+        if not user_exists:
             return Response(
                 json.dumps({"error": "Register first"}),
                 status=400,
                 content_type="application/json"
             )
             
-        # Ensure user exists in templates
-        if current_user not in templates:
+        # Fetch user templates from the database
+        user_templates = db.templates.find_one({"_id": current_user}, {"_id": 0, "templates": 1})
+
+        # Check if the user has any templates
+        if not user_templates or "templates" not in user_templates:
             return Response(
                 json.dumps({"error": "Post a template first."}),
                 status=400,
@@ -179,8 +225,8 @@ def all_template():
 
         response_body = json.dumps({
             "success": True,
-            "message": "Template fetched successfully",
-            "templates": templates[current_user]
+            "message": "Templates fetched successfully",
+            "templates": user_templates["templates"]
         })
 
         response = Response(response_body, status=200, content_type="application/json")
@@ -190,7 +236,7 @@ def all_template():
 
     except Exception:
         return Response(
-            json.dumps({"error": "Invalid JSON body"}),
+            json.dumps({"error": "Something went wrong"}),
             status=400,
             content_type='application/json'
         )
@@ -207,25 +253,38 @@ def single_template(template_id):
         current_user = get_jwt_identity() 
 
         # Ensure user exists in users
-        if current_user not in users:
+        user_exists = db.users.find_one({"_id": current_user})
+        if not user_exists:
             return Response(
                 json.dumps({"error": "Register first"}),
                 status=400,
                 content_type="application/json"
             )
 
-        # Ensure user exists in templates
-        if current_user not in templates:
+        # Fetch the user's templates from the database
+        user_templates = db.templates.find_one({"_id": current_user}, {"_id": 0, "templates": 1})
+
+        # Check if the user has any templates
+        if not user_templates or "templates" not in user_templates:
             return Response(
                 json.dumps({"error": "Post a template first."}),
                 status=400,
                 content_type="application/json"
             )
 
+        # Fetch the requested template by ID
+        template = user_templates["templates"].get(template_id)
+        if not template:
+            return Response(
+                json.dumps({"error": "Template not found."}),
+                status=404,
+                content_type="application/json"
+            )
+
         response_body = json.dumps({
             "success": True,
             "message": "Template fetched successfully",
-            "templates": templates[current_user][template_id]
+            "templates": template
         })
 
         response = Response(response_body, status=200, content_type="application/json")
@@ -235,7 +294,7 @@ def single_template(template_id):
 
     except Exception:
         return Response(
-            json.dumps({"error": "Invalid JSON body"}),
+            json.dumps({"error": "Something went wrong"}),
             status=400,
             content_type='application/json'
         )
@@ -258,28 +317,49 @@ def update_single_template(template_id):
         current_user = get_jwt_identity() 
 
         # Ensure user exists in users
-        if current_user not in users:
+        user_exists = db.users.find_one({"_id": current_user})
+        if not user_exists:
             return Response(
                 json.dumps({"error": "Register first"}),
                 status=400,
                 content_type="application/json"
             )
-            
-        # Ensure user exists in templates
-        if current_user not in templates:
+
+        # Fetch the user's templates
+        user_templates = db.templates.find_one({"_id": current_user}, {"_id": 0, "templates": 1})
+
+        # Check if user has templates
+        if not user_templates or "templates" not in user_templates:
             return Response(
                 json.dumps({"error": "Post a template first."}),
                 status=400,
                 content_type="application/json"
             )
 
-        # Update template
-        templates[current_user][template_id] = {**json_body}
+        # Check if the template exists
+        if template_id not in user_templates["templates"]:
+            return Response(
+                json.dumps({"error": "Template not found."}),
+                status=404,
+                content_type="application/json"
+            )
+
+        # Update the specific template
+        db.templates.update_one(
+            {"_id": current_user},
+            {"$set": {f"templates.{template_id}": json_body}}
+        )
+        
+        # Fetch the updated template from the database
+        updated_template = db.templates.find_one(
+            {"_id": current_user},
+            {"_id": 0, f"templates.{template_id}": 1}
+        )
         
         response_body = json.dumps({
             "success": True,
             "message": "Template updated successfully",
-            "templates": templates[current_user][template_id]
+            "templates": updated_template
         })
 
         response = Response(response_body, status=200, content_type="application/json")
@@ -289,7 +369,7 @@ def update_single_template(template_id):
 
     except Exception:
         return Response(
-            json.dumps({"error": "Invalid JSON body"}),
+            json.dumps({"error": "Something went wrong"}),
             status=400,
             content_type='application/json'
         )
@@ -306,24 +386,39 @@ def delete_single_template(template_id):
         current_user = get_jwt_identity() 
 
         # Ensure user exists in users
-        if current_user not in users:
+        user_exists = db.users.find_one({"_id": current_user})
+        if not user_exists:
             return Response(
-                json.dumps({"error": "Register first"}),
+                json.dumps({"error": "Register first."}),
                 status=400,
                 content_type="application/json"
             )
-            
-        # Ensure user exists in templates
-        if current_user not in templates:
+
+        # Fetch the user's templates
+        user_templates = db.templates.find_one({"_id": current_user}, {"_id": 0, "templates": 1})
+
+        # Check if user has templates
+        if not user_templates or "templates" not in user_templates:
             return Response(
                 json.dumps({"error": "Post a template first."}),
                 status=400,
                 content_type="application/json"
             )
 
-        # delete template
-        templates[current_user].pop(template_id)
-        
+        # Check if the template exists
+        if template_id not in user_templates["templates"]:
+            return Response(
+                json.dumps({"error": "Template not found."}),
+                status=404,
+                content_type="application/json"
+            )
+
+        # Delete the specific template
+        db.templates.update_one(
+            {"_id": current_user},
+            {"$unset": {f"templates.{template_id}": ""}}
+        )
+
         response_body = json.dumps({
             "success": True,
             "message": "Template deleted successfully",
@@ -336,7 +431,7 @@ def delete_single_template(template_id):
 
     except Exception:
         return Response(
-            json.dumps({"error": "Invalid JSON body"}),
+            json.dumps({"error": "Something went wrong"}),
             status=400,
             content_type='application/json'
         )

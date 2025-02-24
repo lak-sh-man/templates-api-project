@@ -1,8 +1,21 @@
 from flask_pymongo import PyMongo
 
 def init_db(app):
-    mongodb_client = PyMongo(app)
-    return mongodb_client.db  
+    try:
+        mongodb_client = PyMongo(app)
+        db_instance = mongodb_client.db  # Get the database instance
+        
+        if db_instance is None:
+            print("❌ MongoDB connection failed: Database instance is None")
+        else:
+            print("✅ MongoDB connected successfully!")
+
+        return db_instance  # Ensure this returns the database
+
+    except Exception as e:
+        print(f"⚠️ Exception during MongoDB connection: {e}")
+        return None
+ 
 
 # STRUCTURE
 
