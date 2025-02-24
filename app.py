@@ -22,7 +22,7 @@ def home():
         "success": True,
         "message": "Welcome to templates api project",
         }) 
-    response = Response(response_body, status=201, content_type="application/json")
+    response = Response(response_body, status=200)
     return response
 
 @app.post("/register")
