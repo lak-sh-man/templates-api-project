@@ -1,1 +1,1 @@
-# Template CRUD
+# Templates CRUD
