@@ -1,0 +1,244 @@
+{
+	"info": {
+		"_postman_id": "19df2fae-8f69-43e9-b15e-89224c1acce3",
+		"name": "Templates-Flask-Restapi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "28705244"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"first_name\" : \"lakshman\",\r\n    \"last_name\" : \"N\",\r\n    \"email\" : \"lakshman1122000@gmail.com\",\r\n    \"password\" : \"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"lakshman1122000@gmail.com\",\r\n    \"password\" : \"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Template",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0IjoxNzQwNDE5ODc0LCJqdGkiOiI2NGJmMGY3NC02NTMxLTRlOTEtYmMwNy0xZTFhZGE5YjUwNWMiLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoibGFrc2htYW4xMTIyMDAwQGdtYWlsLmNvbSIsIm5iZiI6MTc0MDQxOTg3NCwiY3NyZiI6IjY5MGQ5NDFiLWNlMDUtNDhmOC04ZGQzLTVkYzE2MGRkYWU5ZiIsImV4cCI6MTc0MDQyMDc3NH0.VlpZN0mLiyaDD8c9xFwjUKbCZ9eVjcEmylKML6MrFec",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"template_name\": \"Welcome gow\",\r\n    \"subject\": \"Welcome to Our Service!\",\r\n    \"body\": \"Thank you for signing up for our service. We are excited to have you on board!\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/template"
+			},
+			"response": []
+		},
+		{
+			"name": "All Template",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0IjoxNzQwNDE5ODc0LCJqdGkiOiI2NGJmMGY3NC02NTMxLTRlOTEtYmMwNy0xZTFhZGE5YjUwNWMiLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoibGFrc2htYW4xMTIyMDAwQGdtYWlsLmNvbSIsIm5iZiI6MTc0MDQxOTg3NCwiY3NyZiI6IjY5MGQ5NDFiLWNlMDUtNDhmOC04ZGQzLTVkYzE2MGRkYWU5ZiIsImV4cCI6MTc0MDQyMDc3NH0.VlpZN0mLiyaDD8c9xFwjUKbCZ9eVjcEmylKML6MrFec",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/template"
+			},
+			"response": []
+		},
+		{
+			"name": "Single Template",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0IjoxNzQwNDE5ODc0LCJqdGkiOiI2NGJmMGY3NC02NTMxLTRlOTEtYmMwNy0xZTFhZGE5YjUwNWMiLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoibGFrc2htYW4xMTIyMDAwQGdtYWlsLmNvbSIsIm5iZiI6MTc0MDQxOTg3NCwiY3NyZiI6IjY5MGQ5NDFiLWNlMDUtNDhmOC04ZGQzLTVkYzE2MGRkYWU5ZiIsImV4cCI6MTc0MDQyMDc3NH0.VlpZN0mLiyaDD8c9xFwjUKbCZ9eVjcEmylKML6MrFec",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/template/52fe08394c794816923b9ed74aae3abe"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Single Template",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0IjoxNzQwNDE5ODc0LCJqdGkiOiI2NGJmMGY3NC02NTMxLTRlOTEtYmMwNy0xZTFhZGE5YjUwNWMiLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoibGFrc2htYW4xMTIyMDAwQGdtYWlsLmNvbSIsIm5iZiI6MTc0MDQxOTg3NCwiY3NyZiI6IjY5MGQ5NDFiLWNlMDUtNDhmOC04ZGQzLTVkYzE2MGRkYWU5ZiIsImV4cCI6MTc0MDQyMDc3NH0.VlpZN0mLiyaDD8c9xFwjUKbCZ9eVjcEmylKML6MrFec",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"template_name\": \"Welcome santy\",\r\n    \"subject\": \"Welcome to Our Service gow!\",\r\n    \"body\": \"Thank you for signing up for our service. We are excited to have you on board!\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/template/52fe08394c794816923b9ed74aae3abe"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Single Template",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0IjoxNzQwNDE5ODc0LCJqdGkiOiI2NGJmMGY3NC02NTMxLTRlOTEtYmMwNy0xZTFhZGE5YjUwNWMiLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoibGFrc2htYW4xMTIyMDAwQGdtYWlsLmNvbSIsIm5iZiI6MTc0MDQxOTg3NCwiY3NyZiI6IjY5MGQ5NDFiLWNlMDUtNDhmOC04ZGQzLTVkYzE2MGRkYWU5ZiIsImV4cCI6MTc0MDQyMDc3NH0.VlpZN0mLiyaDD8c9xFwjUKbCZ9eVjcEmylKML6MrFec",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/template/52fe08394c794816923b9ed74aae3abe"
+			},
+			"response": []
+		}
+	]
+}
