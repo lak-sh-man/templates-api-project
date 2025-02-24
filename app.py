@@ -2,12 +2,18 @@ from flask import Flask, request, Response
 from validator import validate_header, validate_request_body
 import json
 import uuid
-from db import users, templates
-from flask_jwt_extended import JWTManager, create_access_token, get_jwt, jwt_required, create_refresh_token, get_jwt_identity
+from db import init_db
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
 
+app.config["SECRET_KEY"] = "lakshman-mongodb"
+app.config["MONGO_URI"] = "mongodb+srv://lakshman:0002211namhskal@cluster0.rlfxw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 app.config["JWT_SECRET_KEY"] = "lakshman"
+
+# Initialize database
+db = init_db(app)
+
 jwt = JWTManager(app)
 
 @app.post("/register")
