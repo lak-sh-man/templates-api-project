@@ -16,6 +16,15 @@ db = init_db(app)
 
 jwt = JWTManager(app)
 
+@app.get("/")
+def home():
+    response_body = json.dumps({
+        "success": True,
+        "message": "Welcome to templates api project",
+        }) 
+    response = Response(response_body, status=201, content_type="application/json")
+    return response
+
 @app.post("/register")
 def register_user():
     # validate header
